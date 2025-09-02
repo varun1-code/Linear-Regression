@@ -1,0 +1,92 @@
+for old,new in{'Ground':'0','Upper':'-1','Lower':'-2'}.items():
+    ds.Floor=ds.Floor.str.replace(old,new)
+ds['max_floor']=ds.Floor.apply(lambda x:int(x.split(' ')[-1]))
+ds['Floor']=ds.Floor.apply(lambda x: int(x.split(' ')[0]))
+ds=pd.get_dummies(ds,columns=['City','Point of Contact','Area Type'],drop_first=True)
+fig,ax=plt.subplots(figsize=(12,6))
+sns.heatmap(ds.corr().round(2),annot=True,ax=ax)
+fig.tight_layout()
+ds_gbr=ds.copy()
+ds_xgb=ds.copy()
+ds_xgb_gs=ds.copy()
+ds_lin=ds.copy()
+X = ds_core[['bhk', 'size', 'floor', 'bath', 'furnish', 'max_floor', 'contact_Contact Owner', 'area_type_Super Area', 'city_Chennai',	'city_Delhi',	'city_Hyderabad',	'city_Kolkata']]
+ds_core = ds_lin[ds_lin['City_Mumbai'] == 0].copy()
+ds_core.drop(columns=['City_Mumbai'], inplace=True)
+ds_core['Point of Conatact_Contact Owner'] = ds_core['Point of Conatact_Contact Owner'].astype(int)
+ds_core['area_type_Super Area'] = ds_core['area_type_Super Area'].astype(int)
+ds_core['city_Chennai'] = ds_core['city_Chennai'].astype(int)
+ds_core['city_Delhi'] = ds_core['city_Delhi'].astype(int)
+ds_core['city_Hyderabad'] = ds_core['city_Hyderabad'].astype(int)
+ds_core['city_Kolkata'] = ds_core['city_Kolkata'].astype(int)
+x=ds_core[features]
+y=np.lop1p(ds_core['rent'])
+X_train,X_test,Ytrain,y_test=train
+features=['size','floor','furnish','bath','max_floor','contact_Contact Owner','area_type_Super Area','city_Chennai','city_Delhi','city_Hyderabad','city_Kolkata']
+x=ds_core[features]
+y=np.log1p(ds_core['rent'])
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=42)
+model_l=LinearRegression()
+model_1.fit(X_train,y_train)
+pred_train=np.expm1(model_1.prdeict(X_train))
+pred_test=np.expm1(model_1.predict(X_test)
+y_train_orig=np.exmp1(y_train)
+y_test_orig=np.exmpl(y_test)
+print("Train")
+model_1 = LinearRegression()
+model_1.fit(x_train,y_train)
+
+pred_train = np.expm1(model_1.predict(x_train))
+pred_test = np.expm1(model_1.predict(x_test)) 
+y_train_orig = np.expm1(y_train)
+y_test_orig = np.expm1(y_test)
+
+print("Train")
+print(f"MSE: {mean_squared_error(y_train_orig,pred_train)}")
+print(f"MAPE: {mean_absolute_percentage_error(y_train_orig,pred_train)}")
+print(f"RSQ: {r2_score(y_train_orig,pred_train)}")
+print(f"RMSE:{ sqrt(mean_squared_error(y_train_orig,pred_train))} mean:{int(ds_core.rent.mean())}")
+print("test")
+print(f"MSE: {mean_squared_error(y_test_orig,pred_test)}")
+print(f"MAPE: {mean_absolute_percentage_error(y_test_orig,pred_test)}")
+print(f"RSQ: {r2_score(y_test_orig,pred_test)}")
+print(f"RMSE:{ sqrt(mean_squared_error(y_test_orig,pred_test))} mean:{int(ds_core.rent.mean())}")
+plt.figure(figsize=(6,4))
+sns.scatterplot(x=y_test_orig,y=pred_test-y_test_orig,alpha=0.6,s=50,color='#1f77b4',edgecolor='white',line 
+plt.axhline(y=0,color='green',linestyle="--",linewidth=1.5,label='Zero error line")
+plt.xlabel("Actual rent (y_test)", fontsize=12)
+plt.ylabel("Residuals (y_pred - y_test)", fontsize=12)
+plt.title("Residuals vs Actual Rent", fontsize=14, weight='bold')
+plt.legend(frameon=False)
+sns.despine()
+plt.grid(False)
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(6, 4))
+
+sns.scatterplot(
+    x=y_test_orig, 
+    y=pred_test - y_test_orig, 
+    alpha=0.6, 
+    s=50, 
+    color='#1f77b4', 
+    edgecolor='white'
+)
+
+# Horizontal line at 0 to indicate zero residuals
+plt.axhline(
+    y=0, 
+    color='green', 
+    linestyle="--", 
+    linewidth=1.5, 
+    label='Zero error line'
+)
+plt.xlabel("Actual Rent (y_test)", fontsize=12)
+plt.ylabel("Residuals (y_pred - y_test)", fontsize=12)
+plt.title("Residuals vs Actual Rent", fontsize=14, weight='bold')
+plt.legend(frameon=False)
+sns.despine()
+plt.grid(False)
+plt.tight_layout()
+plt.show()
