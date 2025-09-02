@@ -1,0 +1,73 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+from math import sqrt
+df=pd.read_csv("Advertising.csv")
+df.head()
+df.describe
+#calculating and printing the standar devation of TV,Radio,NewsPaper,Sales
+cols=['TV','radio','newspaper','sales']
+for col in cols:
+    std=df[col].std()
+    print(f"Standard Devation of{col}:{std}")
+fig,ax=plt.subplots(figsize=(12,6))
+sns.heatmap(df.corr().round(2),annot=True,ax=ax)
+fig.tight_layout()
+from sklearn.model_selection import KFold, train_test_split, GridSearchCV
+from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error, r2_score
+from sklearn.linear_model import LinearRegression
+X=df[['TV']]
+y=df['sales']
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)
+model=LinearRegression()
+model.fit(X_train,y_train)
+pred_train=model.predict(X_train)
+pred_test=model.predict(X_test)
+print("Train")
+print(f"RSQ: {r2_score(y_train,pred_train)}")
+print("Test")
+print(f"RSQ: {r2_score(y_test,pred_test)}")
+model=LinearRegression()
+model.fit(X_train,y_train)
+pred_train=model.predict(X_train)
+pred_test=model.predict(X_test)
+print("Train")
+print(f"MSE: {mean_squared_error(y_train,pred_train)}")
+print(f"MAPE: {mean_absolute_percentage_error(y_train,pred_train)}")
+print(f"RSQ: {r2_score(y_train,pred_train)}")
+print(f"RMSE:{ sqrt(mean_squared_error(y_train,pred_train))}")
+print("Test")
+print(f"MSE: {mean_squared_error(y_test,pred_test)}")
+print(f"MAPE: {mean_absolute_percentage_error(y_test,pred_test)}")
+print(f"RSQ: {r2_score(y_test,pred_test)}")
+print(f"RMSE:{ sqrt(mean_squared_error(y_test,pred_test))}")
+print(f"Intercept: {model.intercept_:.4f}")
+coefficients = pd.DataFrame({
+    'Feature': X.columns,
+    'Coefficient': model.coef_
+})
+print(coefficients)
+plt.figure(figsize=(6, 4))
+
+sns.scatterplot(
+    x=y_test, 
+    y=pred_test, 
+    alpha=0.6, 
+    s=50, 
+    color='#1f77b4', 
+    edgecolor='white'
+)
+
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()],
+         '--', color='green', linewidth=1.5, label='Ideal Fit')
+
+plt.xlabel("Actual Sales", fontsize=12)
+plt.ylabel("Predicted Sales", fontsize=12)
+plt.title("Actual vs Predicted Sales (Test Set)", fontsize=14, weight='bold')
+
+plt.legend(frameon=False)
+sns.despine()
+plt.grid(False)
+plt.tight_layout()
+plt.show()
