@@ -59,4 +59,3 @@ sns.pairplot(ds[['BHK','Rent','Size','Floor','Furnishing Status','Bathroom','Cit
 plt.show()
 ds=ds.drop(columns=['Posted On','Area Locality','Tenant Preferred'])
 ds['Furnishing Status']=ds['Furnishing Status'].replace({'Unfurnished':0,'Semi-Furnished':0.5,'Furnished':1})
-  
